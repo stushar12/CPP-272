@@ -1,48 +1,57 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
+
+int matching(string bigstring, string smallstring)
+{
+   unordered_map<char, int> smallmap;
+   for (char ch : smallstring)
+      smallmap[ch]++;
+
+   int window = smallstring.size();
+   int len = smallmap.size();
+
+   int i = 0, j = 0, count = 0;
+
+   while (j < bigstring.length())
+   {
+      if (smallmap.find(bigstring[j]) != smallmap.end())
+      {
+         smallmap[bigstring[j]]--;
+
+         if (smallmap[bigstring[j]] == 0)
+         {
+            len--;
+         }
+      }
+
+      if (j - i + 1 < window)
+         j++;
+
+      else if (j - i + 1 == window)
+      {
+         if (len == 0)
+            count++;
+
+         if (smallmap.find(bigstring[i]) != smallmap.end())
+         {
+            smallmap[bigstring[i]]++;
+            if (smallmap[bigstring[i]] == 1)
+            {
+               len++;
+            }
+         }
+         i++;
+         j++;
+      }
+   }
+   return count;
+}
+
 int main()
 {
-string s="kkkkkkkkt";
-string s2="kkk";
-int m=s.length();
-int n=s2.length();
-int count[256]={0},count2[256]={0};
-int c=0;
-for(int i=0;i<n;i++)
-{   count[s[i]]++;
-    count2[s2[i]]++;
-}
-int flag=0;
-for(int i=n;i<m+1;i++)
-{
-    flag=0;
-    for(int j=0;j<255;j++)
-    {   
-        if(count[j]==count2[j])
-    {
-        flag=1;
-        continue;
-    }
-    else
-    {
-        flag=0;
-        break;
-    }
-    }
-    
-if(flag)
-    c++;
- if(i<m)
-{
-     count[s[i]]++;
-    count[s[i-n]]--;
 
-}
+   string bigstring = "baa";
+   string smallstring = "aa";
 
-
-   
-    }
-    cout<<"No of anagrams: "<<c;
-    
-    
+   cout << matching(bigstring, smallstring);
 }
